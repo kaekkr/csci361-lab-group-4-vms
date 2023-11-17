@@ -1,1 +1,3 @@
-# csci361-lab-group-4-vms
+# CSCI 361 Lab
+# Vehicle Management System
+# Group 4
