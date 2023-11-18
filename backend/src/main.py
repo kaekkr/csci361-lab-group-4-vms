@@ -2,6 +2,10 @@ from fastapi import FastAPI
 
 from src.auth.router import router as auth_router
 from src.user.router import router as user_router
+import src.database.models as models
+from src.database.database import SessionLocal, engine
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

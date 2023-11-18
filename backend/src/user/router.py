@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
 from typing import Annotated
 
-from src.user.models import User
+from src.database.models import User
 from src.user.service import get_current_active_user
-
 
 router = APIRouter()
 
