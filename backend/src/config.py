@@ -1,11 +1,8 @@
-from pydantic_settings import BaseSettings 
+import os
+from dotenv import load_dotenv
 
-class AppSettings(BaseSettings):
-    class Config:
-        env_file = "../.env"
-        env_file_encoding = "utf-8"
-        env_prefix = "app_"
+load_dotenv()
 
-    SECRET_KEY: str
-    ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
+secret_key = os.getenv("SECRET_KEY")
+algorithm = os.getenv("ALGORITHM")
+access_token_expire_minutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
