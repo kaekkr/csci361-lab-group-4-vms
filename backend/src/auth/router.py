@@ -11,10 +11,10 @@ from src.containers import Container
 router = APIRouter()
 
 
-@router.post("/token", response_model=Token)
+@router.post("/login/")
 @inject
-async def login_for_access_token(auth_service: AuthService = Depends(Provide[Container.auth_service]), form_data: OAuth2PasswordRequestForm = Depends()):
-    user = auth_service.authenticate_user(form_data.username, form_data.password)
+def login_for_access_token(user_type: str,auth_service: AuthService = Depends(Provide[Container.auth_service]), form_data: OAuth2PasswordRequestForm = Depends()):
+    user = auth_service.authenticate_user(form_data.username, form_data.password, user_type)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
