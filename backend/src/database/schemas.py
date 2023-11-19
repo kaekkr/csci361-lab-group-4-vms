@@ -17,4 +17,4 @@ class User(UserBase):
     disabled: bool | None = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

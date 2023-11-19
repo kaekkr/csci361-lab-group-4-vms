@@ -1,5 +1,5 @@
 # 
-FROM python:3.9
+FROM python:3.10
 
 # 
 WORKDIR /code
@@ -20,4 +20,4 @@ RUN poetry install
 COPY ./src /code/src
 
 # 
-CMD ["poetry", "shell", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["poetry", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
