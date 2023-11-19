@@ -1,13 +1,23 @@
+"""Application module."""
+
 from fastapi import FastAPI
 
-from src.auth.router import router as auth_router
+from .containers import Container
 from src.user.router import router as user_router
-import src.database.models as models
-from src.database.database import engine
+from src.auth.router import router as auth_router
 
-models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+def create_app() -> FastAPI:
+    container = Container()
 
-app.include_router(auth_router, prefix="/auth", tags=["auth"])
-app.include_router(user_router, prefix="/user", tags=["user"])
+    db = container.db()
+    db.create_database()
+
+    app = FastAPI()
+    app.container = container
+    app.include_router(auth_router, prefix="/auth", tags=["auth"])
+    app.include_router(user_router, prefix="/user", tags=["user"])
+    return app
+
+
+app = create_app()
