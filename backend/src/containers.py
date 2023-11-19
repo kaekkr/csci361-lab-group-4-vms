@@ -23,8 +23,6 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[".admin.router", ".auth.router", "."])
 
-    config = providers.Configuration(yaml_files=["config.yml"])
-
     db = providers.Singleton(Database, db_url=DATABASE_URL)
 
     admin_repository = providers.Factory(

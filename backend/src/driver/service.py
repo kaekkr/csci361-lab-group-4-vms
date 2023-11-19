@@ -1,15 +1,9 @@
 """User Service module."""
 
+from typing import Iterator
+
 from src.database.models import Driver
 from src.database.repositories import DriverRepository
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from typing import Annotated, Iterator
-
-from src.config import SECRET_KEY, ALGORITHM
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 class DriverService:
@@ -22,7 +16,7 @@ class DriverService:
 
     def get_driver_by_id(self, driver_id: int) -> Driver:
         return self._repository.get_by_id(driver_id)
-    
+
     def get_driver_by_email(self, driver_email: int) -> Driver:
         return self._repository.get_by_email(driver_email)
 

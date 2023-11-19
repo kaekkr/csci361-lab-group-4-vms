@@ -1,16 +1,9 @@
 """User Service module."""
 
+from typing import Iterator
+
 from src.database.models import FuelingPerson
 from src.database.repositories import FuelingPersonRepository
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from typing import Annotated, Iterator
-from uuid import uuid4
-
-from src.config import SECRET_KEY, ALGORITHM
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 class FuelingPersonService:
