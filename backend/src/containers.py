@@ -40,9 +40,9 @@ class Container(containers.DeclarativeContainer):
         session_factory = db.provided.session,
     )
 
-    maintenance_person_service = providers.Factory(
+    maintaince_person_service = providers.Factory(
         MaintaincePersonService,
-        maintenance_person_repository = maintenance_person_repository,
+        maintaince_person_repository = maintenance_person_repository,
     )
 
     fueling_person_repository = providers.Factory(
@@ -58,6 +58,6 @@ class Container(containers.DeclarativeContainer):
     auth_service = providers.Factory(
         AuthService,
         driver_service = driver_service,
-        maintenance_person_service = maintenance_person_service,
+        maintaince_person_service = maintaince_person_service,
         fueling_person_service = fueling_person_service
     )

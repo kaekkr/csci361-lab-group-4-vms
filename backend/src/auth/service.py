@@ -21,17 +21,15 @@ class AuthService:
     def verify_password(plain_password, hashed_password):
         return pwd_context.verify(plain_password, hashed_password)
 
-    def authenticate_user(self, username: str, password: str, user_type: str):
+    def authenticate_user(self, user_type: str, username: str, password: str):
         user = None
         print(user_type)
         if user_type == "driver":
             user = self._driverService.get_driver_by_username(username)
         elif user_type == "maintaince_person":
-            user = self._maintaincePersonService.get_maintaince_person_by_username(
-                username)
+            user = self._maintaincePersonService.get_maintaince_person_by_email(username)
         elif user_type == "fueling_person":
-            user = self._fuelingPersonService.get_fueling_person_by_username(
-                username)
+            user = self._fuelingPersonService.get_fueling_person_by_email(username)
 
         if not user:
             return False
