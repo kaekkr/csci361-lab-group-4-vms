@@ -24,8 +24,8 @@ class DriverService:
     def get_driver_by_id(self, driver_id: int) -> Driver:
         return self._repository.get_by_id(driver_id)
     
-    def get_driver_by_username(self, driver_username: int) -> Driver:
-        return self._repository.get_by_username(driver_username)
+    def get_driver_by_email(self, driver_email: int) -> Driver:
+        return self._repository.get_by_email(driver_email)
 
     def create_driver(self, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, hashed_password: str) -> Driver:
         return self._repository.add(name, surname, address, phone_number, email, driving_license_code, hashed_password)

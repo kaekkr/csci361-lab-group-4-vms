@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
     app.include_router(auth_router, prefix="/auth", tags=["auth"])
     app.include_router(user_router, prefix="/user", tags=["user"])
 
-    defaultAccounts.insertToDataBaseDefaultAccounts()
+    # defaultAccounts.insertToDataBaseDefaultAccounts()
 
     return app
 

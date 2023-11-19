@@ -6,13 +6,15 @@ from src.database.database import Database
 from src.database.repositories import DriverRepository, VehicleRepository, MaintenancePersonRepository, FuelingPersonRepository
 from src.auth.service import AuthService
 from src.driver.service import DriverService
+from src.maintaince_person.service import MaintaincePersonService
+from src.fueling_person.service import FuelingPersonService
 from src.config import DATABASE_URL
 
 
 class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
-        modules=[".user.router", ".auth.router"])
+        modules=[".user.router", ".auth.router", "."])
 
     config = providers.Configuration(yaml_files=["config.yml"])
 
@@ -39,7 +41,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     maintenance_person_service = providers.Factory(
-        MaintenancePersonService,
+        MaintaincePersonService,
         maintenance_person_repository = maintenance_person_repository,
     )
 
@@ -49,7 +51,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     fueling_person_service = providers.Factory(
-        fuelingPersonService,
+        FuelingPersonService,
         fueling_person_repository = fueling_person_repository,
     )
 

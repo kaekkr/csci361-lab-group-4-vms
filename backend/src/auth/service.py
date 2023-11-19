@@ -23,6 +23,7 @@ class AuthService:
 
     def authenticate_user(self, username: str, password: str, user_type: str):
         user = None
+        print(user_type)
         if user_type == "driver":
             user = self._driverService.get_driver_by_username(username)
         elif user_type == "maintaince_person":

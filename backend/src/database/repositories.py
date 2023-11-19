@@ -80,12 +80,12 @@ class DriverRepository:
                 raise UserNotFoundError(driver_id)
             return driver
         
-    def get_by_username(self, driver_username: str) -> Driver:
+    def get_by_email(self, driver_email: str) -> Driver:
         with self.session_factory() as session:
             driver = session.query(Driver).filter(
-                Driver.username == driver_username).first()
+                Driver.email == driver_email).first()
             if not driver:
-                raise UserNotFoundError(driver_username)
+                raise UserNotFoundError(driver_email)
             return driver
 
     def add(self, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, hashed_password: str) -> Driver:
@@ -157,12 +157,12 @@ class MaintenancePersonRepository:
                 raise UserNotFoundError(maintenance_person_id)
             return maintenance_person
         
-    def get_by_username(self, maintaince_person_username: str) -> MaintenancePerson:
+    def get_by_email(self, maintaince_person_email: str) -> MaintenancePerson:
         with self.session_factory() as session:
             maintaince_person = session.query(MaintenancePerson).filter(
-                MaintenancePerson.username == maintaince_person_username).first()
+                MaintenancePerson.email == maintaince_person_email).first()
             if not maintaince_person:
-                raise UserNotFoundError(maintaince_person_username)
+                raise UserNotFoundError(maintaince_person_email)
             return maintaince_person
 
     def add(self, name: str, surname: str, address: str, phone_number: str, email: str, hashed_password: str) -> MaintenancePerson:
@@ -200,12 +200,12 @@ class FuelingPersonRepository:
                 raise UserNotFoundError(fueling_person_id)
             return fueling_person
         
-    def get_by_username(self, fueling_person_username: str) -> FuelingPerson:
+    def get_by_email(self, fueling_person_email: str) -> FuelingPerson:
         with self.session_factory() as session:
             fueling_person = session.query(FuelingPerson).filter(
-                FuelingPerson.username == fueling_person_username).first()
+                FuelingPerson.email == fueling_person_email).first()
             if not fueling_person:
-                raise UserNotFoundError(fueling_person_username)
+                raise UserNotFoundError(fueling_person_email)
             return fueling_person
 
     def add(self, name: str, surname: str, address: str, phone_number: str, email: str, hashed_password: str) -> MaintenancePerson:
