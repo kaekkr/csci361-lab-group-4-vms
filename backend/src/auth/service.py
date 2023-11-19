@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import jwt
 
+from src.admin.service import AdminService
 from src.driver.service import DriverService
 from src.maintaince_person.service import MaintaincePersonService
 from src.fueling_person.service import FuelingPersonService
@@ -13,19 +14,31 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class AuthService:
 
-    def __init__(self, driver_service: DriverService, maintaince_person_service: MaintaincePersonService, fueling_person_service: FuelingPersonService) -> None:
+    def __init__(
+            self,
+            admin_service: AdminService,
+            driver_service: DriverService, 
+            maintaince_person_service: MaintaincePersonService, 
+            fueling_person_service: FuelingPersonService
+            ) -> None:
+        self._adminService: AdminService = admin_service
         self._driverService: DriverService = driver_service
         self._maintaincePersonService: MaintaincePersonService = maintaince_person_service
         self._fuelingPersonService: FuelingPersonService = fueling_person_service
 
-    def verify_password(plain_password, hashed_password):
+    def verify_password(
+            self,
+            plain_password: str,
+            hashed_password: str
+            ):
         return pwd_context.verify(plain_password, hashed_password)
 
     def authenticate_user(self, user_type: str, username: str, password: str):
         user = None
-        print(user_type)
-        if user_type == "driver":
-            user = self._driverService.get_driver_by_username(username)
+        if user_type == "admin":
+            user = self._adminService.get_user_by_email(username)
+        elif user_type == "driver":
+            user = self._driverService.get_driver_by_email(username)
         elif user_type == "maintaince_person":
             user = self._maintaincePersonService.get_maintaince_person_by_email(username)
         elif user_type == "fueling_person":
@@ -33,11 +46,11 @@ class AuthService:
 
         if not user:
             return False
-        if not self.verify_password(password, user.hashed_password):
+        if not self.verify_password(password, user.password):
             return False
         return user
 
-    def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.utcnow() + expires_delta

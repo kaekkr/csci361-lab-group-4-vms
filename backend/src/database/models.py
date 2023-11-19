@@ -3,15 +3,15 @@ from sqlalchemy import Boolean, Column, Integer, String
 from src.database.database import Base
 
 
-class User(Base):
-    __tablename__ = "users"
+# class User(Base):
+#     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    full_name = Column(String, nullable=True)
-    hashed_password = Column(String)
-    disabled = Column(Boolean, nullable=True)
+#     id = Column(Integer, primary_key=True, index=True)
+#     username = Column(String, unique=True, index=True)
+#     email = Column(String, unique=True, index=True)
+#     full_name = Column(String, nullable=True)
+#     password = Column(String)
+#     disabled = Column(Boolean, nullable=True)
 
 
 class Admin(Base):
@@ -22,7 +22,7 @@ class Admin(Base):
     address = Column(String(100))
     phone_number = Column(String(15))
     email = Column(String(50), unique=True)
-    password = Column(String(30))
+    password = Column(String)
 
 
 class Driver(Base):
@@ -35,7 +35,7 @@ class Driver(Base):
     phone_number = Column(String(15))
     email = Column(String(50), unique=True)
     driving_license_code = Column(String(20), nullable=False)
-    password = Column(String(30))
+    password = Column(String)
 
 
 class Vehicle(Base):
@@ -55,7 +55,7 @@ class MaintenancePerson(Base):
     address = Column(String(100))
     phone_number = Column(String(15))
     email = Column(String(50), unique=True)
-    password = Column(String(30))
+    password = Column(String)
 
 
 class FuelingPerson(Base):
@@ -66,4 +66,4 @@ class FuelingPerson(Base):
     address = Column(String(100))
     phone_number = Column(String(15))
     email = Column(String(50), unique=True)
-    password = Column(String(30))
+    password = Column(String(255))

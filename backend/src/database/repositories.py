@@ -5,8 +5,11 @@ from typing import Callable, Iterator
 
 from sqlalchemy.orm import Session
 
-from .models import User, Driver, Vehicle, MaintenancePerson, FuelingPerson
+from .models import Admin, Driver, Vehicle, MaintenancePerson, FuelingPerson
 
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class NotFoundError(Exception):
 
@@ -21,47 +24,61 @@ class UserNotFoundError(NotFoundError):
     entity_name: str = "User"
 
 
-class UserRepository:
+class AdminRepository:
 
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
         self.session_factory = session_factory
 
-    def get_all(self) -> Iterator[User]:
+    def get_all(self) -> Iterator[Admin]:
         with self.session_factory() as session:
-            return session.query(User).all()
+            return session.query(Admin).all()
 
-    def get_by_username(self, username: str) -> User:
+    def get_by_username(self, username: str) -> Admin:
         with self.session_factory() as session:
-            user = session.query(User).filter(
-                User.username == username).first()
+            user = session.query(Admin).filter(
+                Admin.email == username).first()
             if not user:
                 raise UserNotFoundError(username)
             return user
 
-    def get_by_id(self, user_id: int) -> User:
+    def get_by_id(self, admin_id: int) -> Admin:
         with self.session_factory() as session:
-            user = session.query(User).filter(User.id == user_id).first()
+            user = session.query(Admin).filter(Admin.id == admin_id).first()
             if not user:
-                raise UserNotFoundError(user_id)
+                raise UserNotFoundError(admin_id)
             return user
 
-    def add(self, email: str, password: str, is_active: bool = True) -> User:
+    def add(
+            self,
+            name: str,
+            surname: str,
+            address: str,
+            phone_number: str,
+            email: str,
+            password: str
+            ) -> Admin:
         with self.session_factory() as session:
-            user = User(email=email, hashed_password=password,
-                        is_active=is_active)
+            user = Admin(
+                name,
+                surname,
+                address,
+                phone_number,
+                email,
+                password = pwd_context.hash(password)
+            )
             session.add(user)
             session.commit()
             session.refresh(user)
             return user
 
-    def delete_by_id(self, user_id: int) -> None:
-        with self.session_factory() as session:
-            entity: User = session.query(User).filter(
-                User.id == user_id).first()
-            if not entity:
-                raise UserNotFoundError(user_id)
-            session.delete(entity)
-            session.commit()
+    # def delete_by_id(self, user_id: int) -> None:
+    #     with self.session_factory() as session:
+    #         entity: User = session.query(User).filter(
+    #             User.id == user_id).first()
+    #         if not entity:
+    #             raise UserNotFoundError(user_id)
+    #         session.delete(entity)
+    #         session.commit()
 
 
 class DriverRepository:

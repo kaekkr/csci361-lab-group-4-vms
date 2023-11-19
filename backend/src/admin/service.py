@@ -1,7 +1,7 @@
 """User Service module."""
 
-from src.database.models import User
-from src.database.repositories import UserRepository
+from src.database.models import Admin
+from src.database.repositories import AdminRepository
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
@@ -13,12 +13,12 @@ from src.config import SECRET_KEY, ALGORITHM
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-class UserService:
+class AdminService:
 
-    def __init__(self, user_repository: UserRepository) -> None:
-        self._repository: UserRepository = user_repository
+    def __init__(self, admin_repository: AdminRepository) -> None:
+        self._repository: AdminRepository = admin_repository
 
-    def get_user_by_username(self, username: int) -> User:
+    def get_user_by_email(self, username: str) -> Admin:
         return self._repository.get_by_username(username)
 
     async def get_current_user(self, token: Annotated[str, Depends(oauth2_scheme)]):
@@ -41,7 +41,7 @@ class UserService:
         return user
 
     async def get_current_active_user(
-        current_user: Annotated[User, Depends(get_current_user)]
+        current_user: Annotated[Admin, Depends(get_current_user)]
     ):
         if current_user.disabled:
             raise HTTPException(status_code=400, detail="Inactive user")
