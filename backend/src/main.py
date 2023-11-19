@@ -14,7 +14,6 @@ from src.fueling_person.router import router as fueling_person_router
 
 def create_app() -> FastAPI:
     container = Container()
-
     app = FastAPI()
 
     app.add_middleware(
