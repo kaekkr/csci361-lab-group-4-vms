@@ -8,7 +8,6 @@ from jose import JWTError, jwt
 from typing import Annotated, Iterator
 from uuid import uuid4
 
-from src.auth.models import TokenData
 from src.config import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

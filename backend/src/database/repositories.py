@@ -33,12 +33,12 @@ class AdminRepository:
         with self.session_factory() as session:
             return session.query(Admin).all()
 
-    def get_by_username(self, username: str) -> Admin:
+    def get_by_email(self, email: str) -> Admin:
         with self.session_factory() as session:
             user = session.query(Admin).filter(
-                Admin.email == username).first()
+                Admin.email == email).first()
             if not user:
-                raise UserNotFoundError(username)
+                raise UserNotFoundError(email)
             return user
 
     def get_by_id(self, admin_id: int) -> Admin:

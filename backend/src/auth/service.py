@@ -33,16 +33,16 @@ class AuthService:
             ):
         return pwd_context.verify(plain_password, hashed_password)
 
-    def authenticate_user(self, user_type: str, username: str, password: str):
+    def authenticate_user(self, user_type: str, email: str, password: str):
         user = None
         if user_type == "admin":
-            user = self._adminService.get_user_by_email(username)
+            user = self._adminService.get_user_by_email(email)
         elif user_type == "driver":
-            user = self._driverService.get_driver_by_email(username)
+            user = self._driverService.get_driver_by_email(email)
         elif user_type == "maintaince_person":
-            user = self._maintaincePersonService.get_maintaince_person_by_email(username)
+            user = self._maintaincePersonService.get_maintaince_person_by_email(email)
         elif user_type == "fueling_person":
-            user = self._fuelingPersonService.get_fueling_person_by_email(username)
+            user = self._fuelingPersonService.get_fueling_person_by_email(email)
 
         if not user:
             return False

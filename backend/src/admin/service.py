@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from typing import Annotated
 
-from src.auth.models import TokenData
+from src.database.schemas import TokenData
 from src.config import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -18,8 +18,8 @@ class AdminService:
     def __init__(self, admin_repository: AdminRepository) -> None:
         self._repository: AdminRepository = admin_repository
 
-    def get_user_by_email(self, username: str) -> Admin:
-        return self._repository.get_by_username(username)
+    def get_user_by_email(self, email: str) -> Admin:
+        return self._repository.get_by_email(email)
 
     async def get_current_user(self, token: Annotated[str, Depends(oauth2_scheme)]):
         credentials_exception = HTTPException(
@@ -35,7 +35,7 @@ class AdminService:
             token_data = TokenData(username=username)
         except JWTError:
             raise credentials_exception
-        user = self.get_user_by_username(token_data.username)
+        user = self.get_user_by_email(token_data.username)
         if user is None:
             raise credentials_exception
         return user
