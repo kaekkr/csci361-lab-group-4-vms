@@ -11,10 +11,7 @@
 	"functions": {
 		"api": {
 			"runtime": "python3.10",
-			"includeFiles": ["src/main.py"],
-			"package": {
-				"include": ["requirements.txt"]
-			}
+			"includeFiles": ["src/main.py"]
 		}
 	},
 	"routes": [
