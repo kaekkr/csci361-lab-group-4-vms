@@ -1,7 +1,7 @@
 {
 	"builds": [
 		{
-			"src": "src/main.py",
+			"src": "/backend/src/main.py",
 			"use": "@vercel/python",
 			"config": {
 				"runtime": "python3.10"
@@ -11,7 +11,7 @@
 	"routes": [
 		{
 			"src": "/(.*)",
-			"dest": "src/main.py"
+			"dest": "backend/src/main.py"
 		}
 	],
   "env": {
