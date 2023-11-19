@@ -25,6 +25,8 @@ class Database:
             ),
         )
 
+        self.create_database()
+
     def create_database(self) -> None:
         Base.metadata.create_all(self._engine)
 

@@ -1,4 +1,7 @@
-from .database import Database
+from src.containers import Container
+from src.database.models import Admin, Driver, Vehicle, MaintenancePerson, FuelingPerson
+
+from sqlalchemy.orm import Session
 
 admin_data = {
     "name": "John",
@@ -45,8 +48,14 @@ fueling_person_data = {
     "password": "fuelingpass",
 }
 
-session.add(Admin(**admin_data))
-session.add(Driver(**driver_data))
-session.add(Vehicle(**vehicle_data))
-session.add(MaintenancePerson(**maintenance_person_data))
-session.add(FuelingPerson(**fueling_person_data))
+def insertToDataBaseDefaultAccounts():
+    container = Container()
+
+    db = container.db()
+    with db.session() as session:
+        session.add(Admin(**admin_data))
+        session.add(Driver(**driver_data))
+        session.add(Vehicle(**vehicle_data))
+        session.add(MaintenancePerson(**maintenance_person_data))
+        session.add(FuelingPerson(**fueling_person_data))
+        session.commit()
