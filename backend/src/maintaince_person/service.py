@@ -18,7 +18,7 @@ class MaintaincePersonService:
     def __init__(self, maintaince_person_repository: MaintenancePersonRepository) -> None:
         self._repository: MaintenancePersonRepository = maintaince_person_repository
 
-    def get_maintaince_person(self) -> Iterator[MaintenancePerson]:
+    def get_maintaince_persons(self) -> Iterator[MaintenancePerson]:
         return self._repository.get_all()
 
     def get_maintaince_person_by_id(self, maintaince_person_id: int) -> MaintenancePerson:

@@ -1,10 +1,18 @@
 """Driver Endpoints module."""
 
-from typing import Annotated
 from fastapi import APIRouter, Depends, Response, status
-# from dependency_injector.wiring import inject, Provide
+from dependency_injector.wiring import inject, Provide
 
-from .service import UserService
-from src.database.models import User
+from src.containers import Container
+from src.driver.service import DriverService
 
 router = APIRouter()
+
+@router.get("/")
+@inject
+def get_list(
+  driver_service: DriverService = Depends(Provide[Container.driver_service])
+):
+  return driver_service.get_drivers()
+
+
