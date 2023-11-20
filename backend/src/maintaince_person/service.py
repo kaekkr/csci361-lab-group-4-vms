@@ -1,4 +1,4 @@
-"""User Service module."""
+"""Maintaince Person Service module."""
 
 from typing import Iterator
 
