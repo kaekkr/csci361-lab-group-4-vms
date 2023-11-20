@@ -20,8 +20,8 @@ class MaintaincePersonService:
     def get_maintaince_person_by_email(self, maintaince_person_email: int) -> MaintenancePerson:
         return self._repository.get_by_email(maintaince_person_email)
 
-    def create_maintaince_person(self, name: str, surname: str, address: str, phone_number: str, email: str, hashed_password: str) -> MaintenancePerson:
-        return self._repository.add(name, surname, address, phone_number, email, hashed_password)
+    def create_maintaince_person(self, name: str, surname: str, address: str, phone_number: str, email: str, password: str) -> MaintenancePerson:
+        return self._repository.add(name, surname, address, phone_number, email, password)
 
     def delete_maintaince_person_by_id(self, maintaince_person_id: int) -> None:
         return self._repository.delete_by_id(maintaince_person_id)

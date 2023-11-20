@@ -1,27 +1,44 @@
 from pydantic import BaseModel
 
 
-class UserBase(BaseModel):
-    username: str
+class Vehicle(BaseModel):
+    model: str
+    year: int
+    license_plate: str
+    sitting_capacity: int
+
+
+class Admin(BaseModel):
+    name: str
+    surname: str
+    address: str
+    phone_number: str
     email: str
-    full_name: str | None = None
-
-
-class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
-    id: int
-    hashed_password: str
-    disabled: bool | None = None
+class Driver(BaseModel):
+    name: str
+    surname: str
+    address: str
+    phone_number: str
+    email: str
+    driving_license_code: str
+    password: str
 
-    class Config:
-        from_attributes = True
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+class FuelingPerson(BaseModel):
+    name: str
+    surname: str
+    address: str
+    phone_number: str
+    email: str
+    password: str
 
-class TokenData(BaseModel):
-    email: str | None = None
+class MaintaincePerson(BaseModel):
+    name: str
+    surname: str
+    address: str
+    phone_number: str
+    email: str
+    password: str
