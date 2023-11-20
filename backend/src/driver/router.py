@@ -6,7 +6,7 @@ from dependency_injector.wiring import inject, Provide
 from src.containers import Container
 from src.driver.service import DriverService
 from src.database.repositories import NotFoundError
-from src.database.schemas import Driver
+from src.database.schemas import Driver, DriverUpdate
 
 router = APIRouter()
 
@@ -39,6 +39,17 @@ def add(
         Provide[Container.driver_service])
 ):
     return driver_service.create_driver(**driver.model_dump())
+
+
+@router.patch("/{driver_id}")
+@inject
+def update(
+    driver_id: int,
+    driver: DriverUpdate,
+    driver_service: DriverService = Depends(
+        Provide[Container.driver_service])
+):
+    return driver_service.update_driver(driver_id, driver)
 
 
 @router.delete("/{driver_id}", status_code=status.HTTP_204_NO_CONTENT)

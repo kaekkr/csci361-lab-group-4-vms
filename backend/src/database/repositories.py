@@ -6,7 +6,7 @@ from typing import Callable, Iterator
 from sqlalchemy.orm import Session
 
 from .models import Admin, Driver, Vehicle, MaintenancePerson, FuelingPerson
-
+from .schemas import DriverUpdate
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -121,6 +121,13 @@ class DriverRepository:
             session.refresh(driver)
             return driver
 
+    def update(self, driver: Driver) -> Driver:
+        with self.session_factory() as session:
+            session.add(driver)
+            session.commit()
+            session.refresh(driver)
+            return driver
+
     def delete_by_id(self, driver_id: int) -> None:
         with self.session_factory() as session:
             entity: Driver = session.query(Driver).filter(
@@ -205,6 +212,13 @@ class MaintenancePersonRepository:
             session.refresh(maintenance_person)
             return maintenance_person
 
+    def update(self, maintenance_person: MaintenancePerson) -> MaintenancePerson:
+        with self.session_factory() as session:
+            session.add(maintenance_person)
+            session.commit()
+            session.refresh(maintenance_person)
+            return maintenance_person
+
     def delete_by_id(self, maintenance_person_id: int) -> None:
         with self.session_factory() as session:
             entity: MaintenancePerson = session.query(Vehicle).filter(
@@ -247,6 +261,13 @@ class FuelingPersonRepository:
                                            phone_number=phone_number,
                                            email=email,
                                            password=pwd_context.hash(password))
+            session.add(fueling_person)
+            session.commit()
+            session.refresh(fueling_person)
+            return fueling_person
+        
+    def update(self, fueling_person: FuelingPerson) -> FuelingPerson:
+        with self.session_factory() as session:
             session.add(fueling_person)
             session.commit()
             session.refresh(fueling_person)

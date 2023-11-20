@@ -6,7 +6,7 @@ from dependency_injector.wiring import inject, Provide
 from src.containers import Container
 from src.fueling_person.service import FuelingPersonService
 from src.database.repositories import NotFoundError
-from src.database.schemas import FuelingPerson
+from src.database.schemas import FuelingPerson, FuelingPersonUpdate
 
 router = APIRouter()
 
@@ -41,6 +41,16 @@ def add(
         Provide[Container.fueling_person_service])
 ):
     return fueling_person_service.create_fueling_person(**fueling_person.model_dump())
+
+@router.patch("/{fueling_person_id}")
+@inject
+def update(
+    fueling_person_id: int,
+    fueling_person: FuelingPersonUpdate,
+    fueling_person_service: FuelingPersonService = Depends(
+        Provide[Container.driver_service])
+):
+    return fueling_person_service.update_fueling_person(fueling_person_id, fueling_person)
 
 
 @router.delete("/{fueling_person_id}", status_code=status.HTTP_204_NO_CONTENT)

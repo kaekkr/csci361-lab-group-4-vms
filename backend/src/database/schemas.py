@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Vehicle(BaseModel):
@@ -27,6 +28,16 @@ class Driver(BaseModel):
     password: str
 
 
+class DriverUpdate(BaseModel):
+    name: Optional[str] = None
+    surname: Optional[str] = None
+    address: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
+    driving_license_code: Optional[str] = None
+    password: Optional[str] = None
+
+
 class FuelingPerson(BaseModel):
     name: str
     surname: str
@@ -35,6 +46,16 @@ class FuelingPerson(BaseModel):
     email: str
     password: str
 
+
+class FuelingPersonUpdate(BaseModel):
+    name: Optional[str] = None
+    surname: Optional[str] = None
+    address: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
+
+
 class MaintaincePerson(BaseModel):
     name: str
     surname: str
@@ -42,3 +63,12 @@ class MaintaincePerson(BaseModel):
     phone_number: str
     email: str
     password: str
+
+
+class MaintaincePersonUpdate(BaseModel):
+    name: Optional[str] = None
+    surname: Optional[str] = None
+    address: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
