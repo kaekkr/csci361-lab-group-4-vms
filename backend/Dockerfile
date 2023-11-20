@@ -2,22 +2,21 @@
 FROM python:3.10
 
 # 
-WORKDIR /code
+WORKDIR /backend
 
 # 
-COPY ./pyproject.toml ./poetry.lock /code/
+COPY . /backend
 
 #
-RUN apt-get update && apt-get install -y python3-dev
+RUN pip install "poetry==1.6.1"
 
 #
-RUN pip install 'poetry==1.6.1'
+RUN poetry export --without-hashes > requirements.txt
+
+#
+RUN pip install -r requirements.txt
 
 # 
-RUN poetry install
+COPY ./src /backend/src
 
-# 
-COPY ./src /code/src
-
-# 
-CMD ["poetry", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD uvicorn src.main:app --port=8000 --host=0.0.0.0
