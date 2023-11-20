@@ -165,6 +165,13 @@ class VehicleRepository:
             session.refresh(vehicle)
             return vehicle
 
+    def update(self, vehicle: Vehicle) -> Vehicle:
+        with self.session_factory() as session:
+            session.add(vehicle)
+            session.commit()
+            session.refresh(vehicle)
+            return vehicle
+
     def delete_by_id(self, vehicle_id: int) -> None:
         with self.session_factory() as session:
             entity: Vehicle = session.query(Vehicle).filter(
@@ -173,13 +180,6 @@ class VehicleRepository:
                 raise UserNotFoundError(vehicle_id)
             session.delete(entity)
             session.commit()
-
-    def update(self, vehicle: Vehicle) -> Vehicle:
-        with self.session_factory() as session:
-            session.add(vehicle)
-            session.commit()
-            session.refresh(vehicle)
-            return vehicle
 
 
 class MaintenancePersonRepository:
@@ -272,7 +272,7 @@ class FuelingPersonRepository:
             session.commit()
             session.refresh(fueling_person)
             return fueling_person
-        
+
     def update(self, fueling_person: FuelingPerson) -> FuelingPerson:
         with self.session_factory() as session:
             session.add(fueling_person)

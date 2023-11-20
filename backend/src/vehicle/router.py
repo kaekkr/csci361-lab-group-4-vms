@@ -42,7 +42,7 @@ def add(
 ):
     return vehicle_service.create_vehicle(**vehicle.model_dump())
 
-@router.patch("/{driver_id}")
+@router.patch("/{vehicle_id}")
 @inject
 def update(
     vehicle_id: int,
