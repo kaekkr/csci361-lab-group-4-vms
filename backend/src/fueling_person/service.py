@@ -20,8 +20,8 @@ class FuelingPersonService:
     def get_fueling_person_by_email(self, fueling_person_email: int) -> FuelingPerson:
         return self._repository.get_by_email(fueling_person_email)
 
-    def create_fueling_person(self, name: str, surname: str, address: str, phone_number: str, email: str, hashed_password: str) -> FuelingPerson:
-        return self._repository.add(name, surname, address, phone_number, email, hashed_password)
+    def create_fueling_person(self, name: str, surname: str, address: str, phone_number: str, email: str, password: str) -> FuelingPerson:
+        return self._repository.add(name, surname, address, phone_number, email, password)
 
     def delete_fueling_person_by_id(self, fueling_person_id: int) -> None:
         return self._repository.delete_by_id(fueling_person_id)
