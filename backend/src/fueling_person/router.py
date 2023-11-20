@@ -48,7 +48,7 @@ def update(
     fueling_person_id: int,
     fueling_person: FuelingPersonUpdate,
     fueling_person_service: FuelingPersonService = Depends(
-        Provide[Container.driver_service])
+        Provide[Container.fueling_person_service])
 ):
     return fueling_person_service.update_fueling_person(fueling_person_id, fueling_person)
 

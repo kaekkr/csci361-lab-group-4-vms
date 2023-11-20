@@ -49,7 +49,7 @@ def update(
     maintaince_person_id: int,
     maintaince_person: MaintaincePersonUpdate,
     maintaince_person_service: MaintaincePersonService = Depends(
-        Provide[Container.driver_service])
+        Provide[Container.maintaince_person_service])
 ):
     return maintaince_person_service.update_maintaince_person(maintaince_person_id, maintaince_person)
 
