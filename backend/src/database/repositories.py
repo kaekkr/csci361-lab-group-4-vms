@@ -174,6 +174,13 @@ class VehicleRepository:
             session.delete(entity)
             session.commit()
 
+    def update(self, vehicle: Vehicle) -> Vehicle:
+        with self.session_factory() as session:
+            session.add(vehicle)
+            session.commit()
+            session.refresh(vehicle)
+            return vehicle
+
 
 class MaintenancePersonRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:

@@ -8,6 +8,11 @@ class Vehicle(BaseModel):
     license_plate: str
     sitting_capacity: int
 
+class VehicleUpdate(BaseModel):
+    model: Optional[str]
+    year: Optional[int]
+    license_plate: Optional[str]
+    sitting_capacity: Optional[int]
 
 class Admin(BaseModel):
     name: str

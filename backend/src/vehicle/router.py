@@ -5,7 +5,7 @@ from dependency_injector.wiring import inject, Provide
 
 from src.containers import Container
 from src.vehicle.service import VehicleService
-from src.database.schemas import Vehicle
+from src.database.schemas import Vehicle, VehicleUpdate
 from src.database.repositories import NotFoundError
 
 router = APIRouter()
@@ -41,6 +41,16 @@ def add(
         Provide[Container.vehicle_service])
 ):
     return vehicle_service.create_vehicle(**vehicle.model_dump())
+
+@router.patch("/{driver_id}")
+@inject
+def update(
+    vehicle_id: int,
+    vehicle: VehicleUpdate,
+    vehicle_service: VehicleService = Depends(
+        Provide[Container.vehicle_service])
+):
+    return vehicle_service.update_vehicle(vehicle_id, vehicle)
 
 
 @router.delete("/{vehicle_id}", status_code=status.HTTP_204_NO_CONTENT)
