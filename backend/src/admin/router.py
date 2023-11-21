@@ -41,6 +41,13 @@ def add(
 ):
     return admin_service.create_admin(**admin.model_dump())
 
+# @router.post("/driver/task", status_code=status.HTTP_201_CREATED)
+# @inject
+# def add(
+#     driverTask: 
+# ):
+    
+
 
 @router.delete("/{admin_id}", status_code=status.HTTP_204_NO_CONTENT)
 @inject
