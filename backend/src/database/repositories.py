@@ -7,11 +7,11 @@ from sqlalchemy.orm import Session
 
 from datetime import datetime
 
-from .models import(
+from .models import (
     Admin, Driver, Vehicle, MaintenancePerson,
     FuelingPerson, DriveTask, FuelingTask,
     MaintenanceTask, MaintenanceJob
-    )
+)
 from .schemas import DriverUpdate
 from passlib.context import CryptContext
 
@@ -296,8 +296,10 @@ class FuelingPersonRepository:
             session.delete(entity)
             session.commit()
 
+
 class DriveTaskNotFoundError(NotFoundError):
     entity_name: str = "DriveTask"
+
 
 class DriveTaskRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
@@ -314,18 +316,19 @@ class DriveTaskRepository:
             if not drive_task:
                 raise DriveTaskNotFoundError(drive_task_id)
             return drive_task
-        
+
     def get_by_driver_id(self, driver_id: int) -> Iterator[DriveTask]:
-        return self.session.query(DriveTask).filter(DriveTask.driver_id == driver_id).all()
-    
+        with self.session_factory() as session:
+            return session.query(DriveTask).filter(DriveTask.driver_id == driver_id).all()
+
     def add(
             self,
             driver_id: int,
-            date: datetime, 
-            isCompleted: bool, 
-            start_location: str, 
+            date: datetime,
+            isCompleted: bool,
+            start_location: str,
             end_location: str
-            ) -> DriveTask:
+    ) -> DriveTask:
         with self.session_factory() as session:
             drive_task = DriveTask(driver_id=driver_id,
                                    date=date,
@@ -355,125 +358,148 @@ class DriveTaskRepository:
 
 
 class FuelingTaskRepository:
-    def __init__(self, session: Session) -> None:
-        self.session = session
+    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
+        self.session_factory = session_factory
 
     def get_all(self) -> Iterator[FuelingTask]:
-        return iter(self.session.query(FuelingTask).all())
+        with self.session_factory() as session:
+            return session.query(FuelingTask).all()
 
     def get_by_id(self, fueling_task_id: int) -> FuelingTask:
-        return self.session.query(FuelingTask).filter(FuelingTask.fueling_task_id == fueling_task_id).first()
-    
+        with self.session_factory() as session:
+            return session.query(FuelingTask).filter(FuelingTask.fueling_task_id == fueling_task_id).first()
+
     def get_by_driver_id(self, driver_id: int) -> Iterator[FuelingTask]:
-        return iter(self.session.query(FuelingTask).filter(FuelingTask.driver_id == driver_id).all())
+        with self.session_factory() as session:
+            return session.query(FuelingTask).filter(FuelingTask.driver_id == driver_id).all()
 
     def get_by_fueling_person_id(self, fueling_person_id: int) -> Iterator[FuelingTask]:
-        return iter(self.session.query(FuelingTask).filter(FuelingTask.fueling_person_id == fueling_person_id).all())
+        with self.session_factory() as session:
+            return session.query(FuelingTask).filter(FuelingTask.fueling_person_id == fueling_person_id).all()
 
     def get_by_vehicle_id(self, vehicle_id: int) -> Iterator[FuelingTask]:
-        return iter(self.session.query(FuelingTask).filter(FuelingTask.vehicle_id == vehicle_id).all())
+        with self.session_factory() as session:
+            return session.query(FuelingTask).filter(FuelingTask.vehicle_id == vehicle_id).all()
 
     def add(self, fueling_person_id: int, driver_id: int, vehicle_id: int, date: datetime, is_completed: bool, cost: int) -> FuelingTask:
-        fueling_task = FuelingTask(
-            fueling_person_id=fueling_person_id,
-            driver_id=driver_id,
-            vehicle_id=vehicle_id,
-            date=date,
-            isCompleted=is_completed,
-            cost=cost
-        )
-        self.session.add(fueling_task)
-        self.session.commit()
-        self.session.refresh(fueling_task)
-        return fueling_task
+        with self.session_factory() as session:
+            fueling_task = FuelingTask(
+                fueling_person_id=fueling_person_id,
+                driver_id=driver_id,
+                vehicle_id=vehicle_id,
+                date=date,
+                isCompleted=is_completed,
+                cost=cost
+            )
+            session.add(fueling_task)
+            session.commit()
+            session.refresh(fueling_task)
+            return fueling_task
 
     def update(self, fueling_task: FuelingTask) -> FuelingTask:
-        self.session.add(fueling_task)
-        self.session.commit()
-        self.session.refresh(fueling_task)
-        return fueling_task
+        with self.session_factory() as session:
+            session.add(fueling_task)
+            session.commit()
+            session.refresh(fueling_task)
+            return fueling_task
 
     def delete_by_id(self, fueling_task_id: int) -> None:
-        fueling_task = self.get_by_id(fueling_task_id)
-        if fueling_task:
-            self.session.delete(fueling_task)
-            self.session.commit()
+        with self.session_factory() as session:
+            fueling_task = self.get_by_id(fueling_task_id)
+            if fueling_task:
+                session.delete(fueling_task)
+                session.commit()
+
 
 class MaintenanceTaskRepository:
-    def __init__(self, session: Session) -> None:
-        self.session = session
+    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
+        self.session_factory = session_factory
 
     def get_all(self) -> Iterator[MaintenanceTask]:
-        return self.session.query(MaintenanceTask).all()
+        with self.session_factory() as session:
+            return session.query(MaintenanceTask).all()
 
     def get_by_id(self, maintenance_task_id: int) -> MaintenanceTask:
-        return self.session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_task_id == maintenance_task_id).first()
-    
+        with self.session_factory() as session:
+            return session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_task_id == maintenance_task_id).first()
+
     def get_by_person_id(self, maintenance_person_id: int) -> Iterator[MaintenanceTask]:
-        return self.session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_person_id == maintenance_person_id).all()
+        with self.session_factory() as session:
+            return session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_person_id == maintenance_person_id).all()
 
     def add(self, maintenance_person_id: int, date: datetime, isCompleted: bool, cumulative_cost: int) -> MaintenanceTask:
-        maintenance_task = MaintenanceTask(
-            maintenance_person_id=maintenance_person_id,
-            date=date,
-            isCompleted=isCompleted,
-            cummulative_cost=cumulative_cost
-        )
-        self.session.add(maintenance_task)
-        self.session.commit()
-        self.session.refresh(maintenance_task)
-        return maintenance_task
+        with self.session_factory() as session:
+            maintenance_task = MaintenanceTask(
+                maintenance_person_id=maintenance_person_id,
+                date=date,
+                isCompleted=isCompleted,
+                cummulative_cost=cumulative_cost
+            )
+            session.add(maintenance_task)
+            session.commit()
+            session.refresh(maintenance_task)
+            return maintenance_task
 
     def update(self, maintenance_task: MaintenanceTask) -> MaintenanceTask:
-        self.session.add(maintenance_task)
-        self.session.commit()
-        self.session.refresh(maintenance_task)
-        return maintenance_task
+        with self.session_factory() as session:
+            session.add(maintenance_task)
+            session.commit()
+            session.refresh(maintenance_task)
+            return maintenance_task
 
     def delete_by_id(self, maintenance_task_id: int) -> None:
-        maintenance_task = self.get_by_id(maintenance_task_id)
-        if maintenance_task:
-            self.session.delete(maintenance_task)
-            self.session.commit()
+        with self.session_factory() as session:
+            maintenance_task = self.get_by_id(maintenance_task_id)
+            if maintenance_task:
+                session.delete(maintenance_task)
+                session.commit()
+
 
 class MaintenanceJobRepository:
-    def __init__(self, session: Session) -> None:
-        self.session = session
+    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
+        self.session_factory = session_factory
 
     def get_all(self) -> Iterator[MaintenanceJob]:
-        return self.session.query(MaintenanceJob).all()
+        with self.session_factory() as session:
+            return session.query(MaintenanceJob).all()
 
     def get_by_id(self, maintenance_job_id: int) -> MaintenanceJob:
-        return self.session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_job_id == maintenance_job_id).first()
+        with self.session_factory() as session:
+            return session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_job_id == maintenance_job_id).first()
 
     def get_by_maintenance_task_id(self, maintenance_task_id: int) -> Iterator[MaintenanceJob]:
-        return self.session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_task_id == maintenance_task_id).all()
-    
+        with self.session_factory() as session:
+            return session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_task_id == maintenance_task_id).all()
+
     def get_by_maintenance_person_id(self, maintenance_person_id: int) -> Iterator[MaintenanceJob]:
-        return self.session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_person_id == maintenance_person_id).all()
+        with self.session_factory() as session:
+            return session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_person_id == maintenance_person_id).all()
 
     def add(self, maintenance_task_id: int, maintenance_person_id: int, isCompleted: bool, detail: str, description: str, cost: int) -> MaintenanceJob:
-        maintenance_job = MaintenanceJob(
-            maintenance_task_id=maintenance_task_id,
-            maintenance_person_id=maintenance_person_id,
-            isCompleted=isCompleted,
-            detail=detail,
-            description=description,
-            cost=cost
-        )
-        self.session.add(maintenance_job)
-        self.session.commit()
-        self.session.refresh(maintenance_job)
-        return maintenance_job
+        with self.session_factory() as session:
+            maintenance_job = MaintenanceJob(
+                maintenance_task_id=maintenance_task_id,
+                maintenance_person_id=maintenance_person_id,
+                isCompleted=isCompleted,
+                detail=detail,
+                description=description,
+                cost=cost
+            )
+            session.add(maintenance_job)
+            session.commit()
+            session.refresh(maintenance_job)
+            return maintenance_job
 
     def update(self, maintenance_job: MaintenanceJob) -> MaintenanceJob:
-        self.session.add(maintenance_job)
-        self.session.commit()
-        self.session.refresh(maintenance_job)
-        return maintenance_job
+        with self.session_factory() as session:
+            session.add(maintenance_job)
+            session.commit()
+            session.refresh(maintenance_job)
+            return maintenance_job
 
     def delete_by_id(self, maintenance_job_id: int) -> None:
-        maintenance_job = self.get_by_id(maintenance_job_id)
-        if maintenance_job:
-            self.session.delete(maintenance_job)
-            self.session.commit()
+        with self.session_factory() as session:
+            maintenance_job = self.get_by_id(maintenance_job_id)
+            if maintenance_job:
+                session.delete(maintenance_job)
+                session.commit()
