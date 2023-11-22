@@ -5,7 +5,12 @@ from typing import Callable, Iterator
 
 from sqlalchemy.orm import Session
 
-from .models import Admin, Driver, Vehicle, MaintenancePerson, FuelingPerson
+from datetime import datetime
+
+from .models import(
+    Admin, Driver, Vehicle, MaintenancePerson,
+    FuelingPerson, DriveTask
+    )
 from .schemas import DriverUpdate
 from passlib.context import CryptContext
 
@@ -287,4 +292,61 @@ class FuelingPersonRepository:
             if not entity:
                 raise UserNotFoundError(fueling_person_id)
             session.delete(entity)
+            session.commit()
+
+class DriveTaskNotFoundError(NotFoundError):
+    entity_name: str = "DriveTask"
+
+class DriveTaskRepository:
+    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
+        self.session_factory = session_factory
+
+    def get_all(self) -> Iterator[DriveTask]:
+        with self.session_factory() as session:
+            return session.query(DriveTask).all()
+
+    def get_by_id(self, drive_task_id: int) -> DriveTask:
+        with self.session_factory() as session:
+            drive_task = session.query(DriveTask).filter(
+                DriveTask.drive_task_id == drive_task_id).first()
+            if not drive_task:
+                raise DriveTaskNotFoundError(drive_task_id)
+            return drive_task
+        
+    def get_by_driver_id(self, driver_id: int) -> Iterator[DriveTask]:
+        return self.session.query(DriveTask).filter(DriveTask.driver_id == driver_id).all()
+    
+    def add(
+            self,
+            driver_id: int,
+            date: datetime, 
+            isCompleted: bool, 
+            start_location: str, 
+            end_location: str
+            ) -> DriveTask:
+        with self.session_factory() as session:
+            drive_task = DriveTask(driver_id=driver_id,
+                                   date=date,
+                                   isCompleted=isCompleted,
+                                   start_location=start_location,
+                                   end_location=end_location)
+            session.add(drive_task)
+            session.commit()
+            session.refresh(drive_task)
+            return drive_task
+
+    def update(self, drive_task: DriveTask) -> DriveTask:
+        with self.session_factory() as session:
+            session.merge(drive_task)
+            session.commit()
+            session.refresh(drive_task)
+            return drive_task
+
+    def delete_by_id(self, drive_task_id: int) -> None:
+        with self.session_factory() as session:
+            drive_task = session.query(DriveTask).filter(
+                DriveTask.drive_task_id == drive_task_id).first()
+            if not drive_task:
+                raise DriveTaskNotFoundError(drive_task_id)
+            session.delete(drive_task)
             session.commit()

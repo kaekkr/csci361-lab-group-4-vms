@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-
+from datetime import datetime
 
 class Vehicle(BaseModel):
     model: str
@@ -77,3 +77,18 @@ class MaintaincePersonUpdate(BaseModel):
     phone_number: Optional[str] = None
     email: Optional[str] = None
     password: Optional[str] = None
+
+
+class DriveTask(BaseModel):# conint is a constrained int that must be >= 0
+    driver_id: int
+    isCompleted: bool
+    date: datetime
+    start_location: str  # constr creates a string of a maximum length
+    end_location: str
+
+class DriveTaskUpdate(BaseModel):
+    driver_id: Optional[int] = None
+    date: Optional[datetime] = None
+    isCompleted: Optional[bool] = None
+    start_location: Optional[str] = None
+    end_location: Optional[str] = None

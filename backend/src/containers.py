@@ -8,7 +8,8 @@ from src.database.repositories import (
     DriverRepository,
     VehicleRepository,
     MaintenancePersonRepository,
-    FuelingPersonRepository
+    FuelingPersonRepository,
+    DriveTaskRepository,
 )
 from src.admin.service import AdminService
 from src.auth.service import AuthService
@@ -17,6 +18,7 @@ from src.maintaince_person.service import MaintaincePersonService
 from src.fueling_person.service import FuelingPersonService
 from src.vehicle.service import VehicleService
 from src.config import DATABASE_URL
+from src.tasks.driver_task.service import DriveTaskService
 
 
 class Container(containers.DeclarativeContainer):
@@ -82,4 +84,14 @@ class Container(containers.DeclarativeContainer):
         driver_service=driver_service,
         maintaince_person_service=maintaince_person_service,
         fueling_person_service=fueling_person_service
+    )
+
+    drive_task_repository = providers.Factory(
+        DriveTaskRepository,
+        session_factory=db.provided.session,
+    )
+
+    drive_task_service = providers.Factory(
+        DriveTaskService,
+        drive_task_repository = drive_task_repository
     )

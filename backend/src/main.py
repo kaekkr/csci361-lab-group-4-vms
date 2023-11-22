@@ -11,6 +11,7 @@ from src.driver.router import router as driver_router
 from src.maintaince_person.router import router as maintaince_person_router
 from src.fueling_person.router import router as fueling_person_router
 from src.vehicle.router import router as vehicle_router
+from src.tasks.driver_task.router import router as drive_task_router
 
 
 def create_app() -> FastAPI:
@@ -32,7 +33,7 @@ def create_app() -> FastAPI:
     app.include_router(fueling_person_router, prefix="/fueling_person", tags=["fueling person"])
     app.include_router(maintaince_person_router, prefix="/maintaince_person", tags=["maintaince person"])
     app.include_router(vehicle_router, prefix="/vehicle", tags=["vehicle"])
-
+    app.include_router(drive_task_router, prefix="/drive_task", tags= ["drive task"])
 
     # defaultAccounts.insertToDataBaseDefaultAccounts()
 
