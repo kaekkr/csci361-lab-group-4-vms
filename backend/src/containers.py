@@ -10,7 +10,9 @@ from src.database.repositories import (
     MaintenancePersonRepository,
     FuelingPersonRepository,
     DriveTaskRepository,
-    FuelingTaskRepository
+    FuelingTaskRepository,
+    MaintenanceTaskRepository,
+    MaintenanceJobRepository
 )
 from src.admin.service import AdminService
 from src.auth.service import AuthService
@@ -21,7 +23,8 @@ from src.vehicle.service import VehicleService
 from src.config import DATABASE_URL
 from src.tasks.driver_task.service import DriveTaskService
 from src.tasks.fueling_task.service import FuelingTaskService
-
+from src.tasks.maintenance_task.service import MaintenanceTaskService
+from src.tasks.maintenance_job.service import MaintenanceJobService
 
 class Container(containers.DeclarativeContainer):
 
@@ -30,7 +33,8 @@ class Container(containers.DeclarativeContainer):
             ".admin.router", ".auth.router", ".driver.router",
             ".maintaince_person.router", ".fueling_person.router", 
             ".vehicle.router", ".tasks.driver_task.router",
-            ".tasks.fueling_task.router" 
+            ".tasks.fueling_task.router", ".tasks.maintenance_task.router",
+            ".tasks.maintenance_job.router"
             ]
             )
 
@@ -112,4 +116,24 @@ class Container(containers.DeclarativeContainer):
     fueling_task_service = providers.Factory(
         FuelingTaskService, 
         fueling_task_repository=fueling_task_repository
+    )
+
+    maintenance_task_repository = providers.Factory(
+        MaintenanceTaskRepository,
+        session_factory=db.provided.session,
+    )
+
+    maintenance_task_service = providers.Factory(
+        MaintenanceTaskService,
+        maintenance_task_repository=maintenance_task_repository
+    )
+
+    maintenance_job_repository = providers.Factory(
+        MaintenanceJobRepository,
+        session_factory=db.provided.session,
+    )
+
+    maintenance_job_service = providers.Factory(
+        MaintenanceJobService,
+        maintenance_job_repository=maintenance_job_repository
     )

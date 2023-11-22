@@ -10,6 +10,7 @@ from datetime import datetime
 from .models import(
     Admin, Driver, Vehicle, MaintenancePerson,
     FuelingPerson, DriveTask, FuelingTask,
+    MaintenanceTask, MaintenanceJob
     )
 from .schemas import DriverUpdate
 from passlib.context import CryptContext
@@ -112,9 +113,10 @@ class DriverRepository:
                 raise UserNotFoundError(driver_email)
             return driver
 
-    def add(self, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, password: str) -> Driver:
+    def add(self, gov_id: int, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, password: str) -> Driver:
         with self.session_factory() as session:
-            driver = Driver(nam=name,
+            driver = Driver(gov_id=gov_id,
+                            nam=name,
                             surname=surname,
                             address=address,
                             phone_number=phone_number,
@@ -395,4 +397,83 @@ class FuelingTaskRepository:
         fueling_task = self.get_by_id(fueling_task_id)
         if fueling_task:
             self.session.delete(fueling_task)
+            self.session.commit()
+
+class MaintenanceTaskRepository:
+    def __init__(self, session: Session) -> None:
+        self.session = session
+
+    def get_all(self) -> Iterator[MaintenanceTask]:
+        return self.session.query(MaintenanceTask).all()
+
+    def get_by_id(self, maintenance_task_id: int) -> MaintenanceTask:
+        return self.session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_task_id == maintenance_task_id).first()
+    
+    def get_by_person_id(self, maintenance_person_id: int) -> Iterator[MaintenanceTask]:
+        return self.session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_person_id == maintenance_person_id).all()
+
+    def add(self, maintenance_person_id: int, date: datetime, isCompleted: bool, cumulative_cost: int) -> MaintenanceTask:
+        maintenance_task = MaintenanceTask(
+            maintenance_person_id=maintenance_person_id,
+            date=date,
+            isCompleted=isCompleted,
+            cummulative_cost=cumulative_cost
+        )
+        self.session.add(maintenance_task)
+        self.session.commit()
+        self.session.refresh(maintenance_task)
+        return maintenance_task
+
+    def update(self, maintenance_task: MaintenanceTask) -> MaintenanceTask:
+        self.session.add(maintenance_task)
+        self.session.commit()
+        self.session.refresh(maintenance_task)
+        return maintenance_task
+
+    def delete_by_id(self, maintenance_task_id: int) -> None:
+        maintenance_task = self.get_by_id(maintenance_task_id)
+        if maintenance_task:
+            self.session.delete(maintenance_task)
+            self.session.commit()
+
+class MaintenanceJobRepository:
+    def __init__(self, session: Session) -> None:
+        self.session = session
+
+    def get_all(self) -> Iterator[MaintenanceJob]:
+        return self.session.query(MaintenanceJob).all()
+
+    def get_by_id(self, maintenance_job_id: int) -> MaintenanceJob:
+        return self.session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_job_id == maintenance_job_id).first()
+
+    def get_by_maintenance_task_id(self, maintenance_task_id: int) -> Iterator[MaintenanceJob]:
+        return self.session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_task_id == maintenance_task_id).all()
+    
+    def get_by_maintenance_person_id(self, maintenance_person_id: int) -> Iterator[MaintenanceJob]:
+        return self.session.query(MaintenanceJob).filter(MaintenanceJob.maintenance_person_id == maintenance_person_id).all()
+
+    def add(self, maintenance_task_id: int, maintenance_person_id: int, isCompleted: bool, detail: str, description: str, cost: int) -> MaintenanceJob:
+        maintenance_job = MaintenanceJob(
+            maintenance_task_id=maintenance_task_id,
+            maintenance_person_id=maintenance_person_id,
+            isCompleted=isCompleted,
+            detail=detail,
+            description=description,
+            cost=cost
+        )
+        self.session.add(maintenance_job)
+        self.session.commit()
+        self.session.refresh(maintenance_job)
+        return maintenance_job
+
+    def update(self, maintenance_job: MaintenanceJob) -> MaintenanceJob:
+        self.session.add(maintenance_job)
+        self.session.commit()
+        self.session.refresh(maintenance_job)
+        return maintenance_job
+
+    def delete_by_id(self, maintenance_job_id: int) -> None:
+        maintenance_job = self.get_by_id(maintenance_job_id)
+        if maintenance_job:
+            self.session.delete(maintenance_job)
             self.session.commit()

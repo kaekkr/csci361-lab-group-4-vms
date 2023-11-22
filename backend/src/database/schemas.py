@@ -24,6 +24,7 @@ class Admin(BaseModel):
 
 
 class Driver(BaseModel):
+    gov_id: int
     name: str
     surname: str
     address: str
@@ -111,4 +112,30 @@ class FuelingTaskUpdate(BaseModel):
     cost: Optional[int] = None
 
 
+class MaintenanceTask(BaseModel):
+    maintenance_person_id: int
+    date: datetime
+    isCompleted: bool
+    cummulative_cost: int
 
+class MaintenanceTaskUpdate(BaseModel):
+    maintenance_person_id: Optional[int] = None 
+    date: Optional[datetime] = None
+    isCompleted: Optional[bool] = None
+    cummulative_cost: Optional[int] = None 
+
+class MaintenanceJob(BaseModel):
+    maintenance_task_id: int
+    maintenance_person_id: int
+    isCompleted: bool
+    detail: str
+    description: str
+    cost: int
+
+class MaintenanceJobUpdate(BaseModel):
+    maintenance_task_id: Optional[int] = None 
+    maintenance_person_id: Optional[int] = None 
+    isCompleted: Optional[bool] = None
+    detail: Optional[str] = None
+    description: Optional[str] = None
+    cost: Optional[int] = None 

@@ -21,8 +21,8 @@ class DriverService:
     def get_driver_by_email(self, driver_email: int) -> Driver:
         return self._repository.get_by_email(driver_email)
 
-    def create_driver(self, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, password: str) -> Driver:
-        return self._repository.add(name, surname, address, phone_number, email, driving_license_code, password)
+    def create_driver(self, gov_id: int, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, password: str) -> Driver:
+        return self._repository.add(gov_id, name, surname, address, phone_number, email, driving_license_code, password)
 
     def update_driver(self, driver_id: int, driver: DriverUpdate) -> Driver:
         db_driver = self.get_driver_by_id(driver_id)

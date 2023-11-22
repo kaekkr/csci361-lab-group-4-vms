@@ -13,6 +13,8 @@ from src.fueling_person.router import router as fueling_person_router
 from src.vehicle.router import router as vehicle_router
 from src.tasks.driver_task.router import router as drive_task_router
 from src.tasks.fueling_task.router import router as fueling_task_router
+from src.tasks.maintenance_task.router import router as maintenance_task_router
+from src.tasks.maintenance_job.router import router as maintenance_job_router
 
 def create_app() -> FastAPI:
     container = Container()
@@ -35,7 +37,8 @@ def create_app() -> FastAPI:
     app.include_router(vehicle_router, prefix="/vehicle", tags=["vehicle"])
     app.include_router(drive_task_router, prefix="/drive_task", tags= ["drive task"])
     app.include_router(fueling_task_router, prefix="/fueling_task_router", tags=["fueling task"])
-
+    app.include_router(maintenance_task_router, prefix="/maintenance_task", tags=["maintenance task"])
+    app.include_router(maintenance_job_router, prefix="/maintenance_job", tags=["maintenance job"])
     # defaultAccounts.insertToDataBaseDefaultAccounts()
 
     return app
