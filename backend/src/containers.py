@@ -24,7 +24,7 @@ from src.tasks.driver_task.service import DriveTaskService
 class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
-        modules=[".admin.router", ".auth.router", ".driver.router", ".maintaince_person.router", ".fueling_person.router", ".vehicle.router"])
+        modules=[".admin.router", ".auth.router", ".driver.router", ".maintaince_person.router", ".fueling_person.router", ".vehicle.router", ".tasks.driver_task.router"])
 
     db = providers.Singleton(Database, db_url=DATABASE_URL)
 
@@ -55,7 +55,7 @@ class Container(containers.DeclarativeContainer):
 
     vehicle_service = providers.Factory(
         VehicleService,
-        vehicle_repository = vehicle_repository
+        vehicle_repository=vehicle_repository
     )
 
     maintenance_person_repository = providers.Factory(
@@ -93,5 +93,5 @@ class Container(containers.DeclarativeContainer):
 
     drive_task_service = providers.Factory(
         DriveTaskService,
-        drive_task_repository = drive_task_repository
+        drive_task_repository=drive_task_repository
     )

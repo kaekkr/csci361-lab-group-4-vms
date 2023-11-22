@@ -54,6 +54,8 @@ class MaintenancePerson(Base):
     email = Column(String(50), unique=True)
     password = Column(String)
 
+    maintenance_tasks = relationship("MaintenanceTask", back_populates="maintenance_person")
+    maintenance_jobs = relationship("MaintenanceJob", back_populates="maintenance_person")
 
 class FuelingPerson(Base):
     __tablename__ = 'fueling_person'
