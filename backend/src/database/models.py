@@ -31,6 +31,7 @@ class Driver(Base):
     password = Column(String)
 
     drive_tasks = relationship("DriveTask", back_populates="driver")
+    fueling_tasks = relationship("FuelingTask", back_populates="driver")
 
 
 class Vehicle(Base):
@@ -41,6 +42,7 @@ class Vehicle(Base):
     license_plate = Column(String(20), unique=True, nullable=False)
     sitting_capacity = Column(Integer, nullable=False)
 
+    fueling_tasks = relationship("FuelingTask", back_populates="vehicle")
 
 class MaintenancePerson(Base):
     __tablename__ = 'maintenance_person'
@@ -62,6 +64,8 @@ class FuelingPerson(Base):
     phone_number = Column(String(15))
     email = Column(String(50), unique=True)
     password = Column(String(255))
+
+    fueling_tasks = relationship("FuelingTask", back_populates="fueling_person")
 
 
 # === tasks ===
@@ -101,6 +105,10 @@ class FuelingTask(Base):
     isCompleted = Column(Boolean, nullable=False)
     cost = Column(Integer, nullable=False)
 
+    fueling_person = relationship("FuelingPerson", back_populates="fueling_tasks")
+    driver = relationship("Driver", back_populates="fueling_tasks")
+    vehicle = relationship("Vehicle", back_populates="fueling_tasks")
+
 
 maintenance_task_job_association = Table(
     'maintenance_task_job_association',
@@ -116,6 +124,7 @@ class MaintenanceTask(Base):
     isCompleted = Column(Boolean, nullable=False) # enum complete incomplete
     cummulative_cost = Column(Integer, nullable=False)
 
+    maintenance_person = relationship("MaintenancePerson", back_populates="maintenance_tasks")
     # Create a one-to-many relationship with MaintenanceJob using the association table
     jobs = relationship("MaintenanceJob", secondary=maintenance_task_job_association)
 
@@ -123,11 +132,16 @@ class MaintenanceTask(Base):
 class MaintenanceJob(Base):
     __tablename__ = "maintenance_job"
     maintenance_job_id = Column(Integer, primary_key=True)
+    maintenance_task_id = Column(Integer, ForeignKey('maintenance_task.maintenance_task_id'))
     maintenance_person_id = Column(Integer, ForeignKey('maintenance_person.maintenance_person_id'))
     isCompleted = Column(Boolean, nullable=False) # enum complete incomplete
     detail = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
     cost = Column(Integer, nullable=False)
+
+    task = relationship("MaintenanceTask", back_populates="jobs")
+    maintenance_person = relationship("MaintenancePerson", back_populates="maintenance_jobs")
+
 
 
 
