@@ -18,8 +18,8 @@ class MaintenanceTaskService:
     def get_maintenance_tasks_by_person_id(self, maintenance_person_id: int) -> Iterator[MaintenanceTask]:
         return self._repository.get_by_person_id(maintenance_person_id)
 
-    def create_maintenance_task(self, maintenance_person_id: int, date: datetime, isCompleted: bool, cumulative_cost: int) -> MaintenanceTask:
-        return self._repository.add(maintenance_person_id, date, isCompleted, cumulative_cost)
+    def create_maintenance_task(self, maintenance_person_id: int, date: datetime, isCompleted: bool, cummulative_cost: int) -> MaintenanceTask:
+        return self._repository.add(maintenance_person_id, date, isCompleted, cummulative_cost)
 
     def update_maintenance_task(self, maintenance_task_id: int, maintenance_task: MaintenanceTaskUpdate) -> MaintenanceTask:
         existing_maintenance_task = self.get_maintenance_task_by_id(maintenance_task_id)

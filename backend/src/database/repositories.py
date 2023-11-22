@@ -342,7 +342,7 @@ class DriveTaskRepository:
 
     def update(self, drive_task: DriveTask) -> DriveTask:
         with self.session_factory() as session:
-            session.merge(drive_task)
+            session.add(drive_task)
             session.commit()
             session.refresh(drive_task)
             return drive_task
@@ -381,14 +381,14 @@ class FuelingTaskRepository:
         with self.session_factory() as session:
             return session.query(FuelingTask).filter(FuelingTask.vehicle_id == vehicle_id).all()
 
-    def add(self, fueling_person_id: int, driver_id: int, vehicle_id: int, date: datetime, is_completed: bool, cost: int) -> FuelingTask:
+    def add(self, fueling_person_id: int, driver_id: int, vehicle_id: int, date: datetime, isCompleted: bool, cost: int) -> FuelingTask:
         with self.session_factory() as session:
             fueling_task = FuelingTask(
                 fueling_person_id=fueling_person_id,
                 driver_id=driver_id,
                 vehicle_id=vehicle_id,
                 date=date,
-                isCompleted=is_completed,
+                isCompleted=isCompleted,
                 cost=cost
             )
             session.add(fueling_task)
@@ -427,13 +427,13 @@ class MaintenanceTaskRepository:
         with self.session_factory() as session:
             return session.query(MaintenanceTask).filter(MaintenanceTask.maintenance_person_id == maintenance_person_id).all()
 
-    def add(self, maintenance_person_id: int, date: datetime, isCompleted: bool, cumulative_cost: int) -> MaintenanceTask:
+    def add(self, maintenance_person_id: int, date: datetime, isCompleted: bool, cummulative_cost: int) -> MaintenanceTask:
         with self.session_factory() as session:
             maintenance_task = MaintenanceTask(
                 maintenance_person_id=maintenance_person_id,
                 date=date,
                 isCompleted=isCompleted,
-                cummulative_cost=cumulative_cost
+                cummulative_cost=cummulative_cost
             )
             session.add(maintenance_task)
             session.commit()

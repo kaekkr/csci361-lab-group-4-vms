@@ -63,7 +63,7 @@ def create_fueling_task(
     fueling_task_service: FuelingTaskService = Depends(
         Provide[Container.fueling_task_service])
 ):
-    return fueling_task_service.create_fueling_task(**fueling_task.dict())
+    return fueling_task_service.create_fueling_task(**fueling_task.model_dump())
 
 @router.patch("/{fueling_task_id}", response_model=FuelingTask)
 @inject

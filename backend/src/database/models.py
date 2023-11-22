@@ -1,6 +1,6 @@
 from sqlalchemy import(
     Column, Integer, String, Boolean,
-    TIMESTAMP, Text, ARRAY, ForeignKey,
+    TIMESTAMP, Text, ForeignKey,
     Table
     )
 from sqlalchemy.orm import relationship

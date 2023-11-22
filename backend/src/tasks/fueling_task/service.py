@@ -25,8 +25,8 @@ class FuelingTaskService:
     def get_fueling_tasks_by_vehicle_id(self, vehicle_id: int) -> Iterator[FuelingTask]:
         return self._repository.get_by_vehicle_id(vehicle_id)
 
-    def create_fueling_task(self, fueling_person_id: int, driver_id: int, vehicle_id: int, date: datetime, is_completed: bool, cost: int) -> FuelingTask:
-        return self._repository.add(fueling_person_id, driver_id, vehicle_id, date, is_completed, cost)
+    def create_fueling_task(self, fueling_person_id: int, driver_id: int, vehicle_id: int, date: datetime, isCompleted: bool, cost: int) -> FuelingTask:
+        return self._repository.add(fueling_person_id, driver_id, vehicle_id, date, isCompleted, cost)
 
     def update_fueling_task(self, fueling_task_id: int, fueling_task: FuelingTaskUpdate) -> FuelingTask:
         existing_fueling_task = self.get_fueling_task_by_id(fueling_task_id)

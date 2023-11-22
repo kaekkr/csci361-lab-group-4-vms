@@ -30,9 +30,9 @@ def get_by_id(
     except NotFoundError:
         return Response(status_code=status.HTTP_404_NOT_FOUND)
     
-@router.get("/{driver_id}")
+@router.get("/by_driver/{driver_id}")
 @inject
-def get_by_id(
+def get_by_driver_id(
     driver_id: int,
     drive_task_service: DriveTaskService = Depends(
         Provide[Container.drive_task_service])
