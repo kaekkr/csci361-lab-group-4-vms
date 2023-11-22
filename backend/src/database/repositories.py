@@ -9,7 +9,7 @@ from datetime import datetime
 
 from .models import(
     Admin, Driver, Vehicle, MaintenancePerson,
-    FuelingPerson, DriveTask
+    FuelingPerson, DriveTask, FuelingTask,
     )
 from .schemas import DriverUpdate
 from passlib.context import CryptContext
@@ -350,3 +350,49 @@ class DriveTaskRepository:
                 raise DriveTaskNotFoundError(drive_task_id)
             session.delete(drive_task)
             session.commit()
+
+
+class FuelingTaskRepository:
+    def __init__(self, session: Session) -> None:
+        self.session = session
+
+    def get_all(self) -> Iterator[FuelingTask]:
+        return iter(self.session.query(FuelingTask).all())
+
+    def get_by_id(self, fueling_task_id: int) -> FuelingTask:
+        return self.session.query(FuelingTask).filter(FuelingTask.fueling_task_id == fueling_task_id).first()
+    
+    def get_by_driver_id(self, driver_id: int) -> Iterator[FuelingTask]:
+        return iter(self.session.query(FuelingTask).filter(FuelingTask.driver_id == driver_id).all())
+
+    def get_by_fueling_person_id(self, fueling_person_id: int) -> Iterator[FuelingTask]:
+        return iter(self.session.query(FuelingTask).filter(FuelingTask.fueling_person_id == fueling_person_id).all())
+
+    def get_by_vehicle_id(self, vehicle_id: int) -> Iterator[FuelingTask]:
+        return iter(self.session.query(FuelingTask).filter(FuelingTask.vehicle_id == vehicle_id).all())
+
+    def add(self, fueling_person_id: int, driver_id: int, vehicle_id: int, date: datetime, is_completed: bool, cost: int) -> FuelingTask:
+        fueling_task = FuelingTask(
+            fueling_person_id=fueling_person_id,
+            driver_id=driver_id,
+            vehicle_id=vehicle_id,
+            date=date,
+            isCompleted=is_completed,
+            cost=cost
+        )
+        self.session.add(fueling_task)
+        self.session.commit()
+        self.session.refresh(fueling_task)
+        return fueling_task
+
+    def update(self, fueling_task: FuelingTask) -> FuelingTask:
+        self.session.add(fueling_task)
+        self.session.commit()
+        self.session.refresh(fueling_task)
+        return fueling_task
+
+    def delete_by_id(self, fueling_task_id: int) -> None:
+        fueling_task = self.get_by_id(fueling_task_id)
+        if fueling_task:
+            self.session.delete(fueling_task)
+            self.session.commit()

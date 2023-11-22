@@ -92,3 +92,23 @@ class DriveTaskUpdate(BaseModel):
     isCompleted: Optional[bool] = None
     start_location: Optional[str] = None
     end_location: Optional[str] = None
+
+
+class FuelingTask(BaseModel):
+    fueling_person_id: int
+    driver_id: Optional[int] = None 
+    vehicle_id: Optional[int] = None
+    date: datetime
+    isCompleted: bool
+    cost: int
+
+class FuelingTaskUpdate(BaseModel):
+    fueling_person_id: Optional[int] = None
+    driver_id: Optional[int] = None 
+    vehicle_id: Optional[int] = None
+    date: Optional[datetime] = None
+    isCompleted: Optional[bool] = None
+    cost: Optional[int] = None
+
+
+

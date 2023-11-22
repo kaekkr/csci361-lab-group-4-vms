@@ -10,6 +10,7 @@ from src.database.repositories import (
     MaintenancePersonRepository,
     FuelingPersonRepository,
     DriveTaskRepository,
+    FuelingTaskRepository
 )
 from src.admin.service import AdminService
 from src.auth.service import AuthService
@@ -19,12 +20,19 @@ from src.fueling_person.service import FuelingPersonService
 from src.vehicle.service import VehicleService
 from src.config import DATABASE_URL
 from src.tasks.driver_task.service import DriveTaskService
+from src.tasks.fueling_task.service import FuelingTaskService
 
 
 class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
-        modules=[".admin.router", ".auth.router", ".driver.router", ".maintaince_person.router", ".fueling_person.router", ".vehicle.router", ".tasks.driver_task.router"])
+        modules=[
+            ".admin.router", ".auth.router", ".driver.router",
+            ".maintaince_person.router", ".fueling_person.router", 
+            ".vehicle.router", ".tasks.driver_task.router",
+            ".tasks.fueling_task.router" 
+            ]
+            )
 
     db = providers.Singleton(Database, db_url=DATABASE_URL)
 
@@ -94,4 +102,14 @@ class Container(containers.DeclarativeContainer):
     drive_task_service = providers.Factory(
         DriveTaskService,
         drive_task_repository=drive_task_repository
+    )
+
+    fueling_task_repository = providers.Factory(
+        FuelingTaskRepository,
+        session_factory=db.provided.session,
+    )
+
+    fueling_task_service = providers.Factory(
+        FuelingTaskService, 
+        fueling_task_repository=fueling_task_repository
     )
