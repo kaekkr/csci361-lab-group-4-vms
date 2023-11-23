@@ -52,7 +52,7 @@ class AuthService:
         if not self.verify_password(password, user.password):
             return False
         return user
-
+    
     def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
         to_encode = data.copy()
         if expires_delta:
