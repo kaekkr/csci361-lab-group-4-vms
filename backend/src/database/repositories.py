@@ -116,7 +116,7 @@ class DriverRepository:
     def add(self, gov_id: int, name: str, surname: str, address: str, phone_number: str, email: str, driving_license_code: str, password: str) -> Driver:
         with self.session_factory() as session:
             driver = Driver(gov_id=gov_id,
-                            nam=name,
+                            name=name,
                             surname=surname,
                             address=address,
                             phone_number=phone_number,
